@@ -63,7 +63,6 @@ foreach(RULE IN LISTS HSACO_RULES)
       "--signature" "${SIG}"
       "--timeout" "${AOTRITON_GPU_BUILD_TIMEOUT}"
       COMMAND ${ZSTD_EXEC} "-q" "-f" ${HSACO}
-      DEPENDS aotriton_venv_triton
     )
     list(APPEND ALL_HSACOS "${HSACO}.zst")
   else(AOTRITON_COMPRESS_KERNEL)
@@ -80,7 +79,6 @@ foreach(RULE IN LISTS HSACO_RULES)
       "--target" "${TGTGPU}"
       "--signature" "${SIG}"
       "--timeout" "${AOTRITON_GPU_BUILD_TIMEOUT}"
-      DEPENDS aotriton_venv_triton
     )
     list(APPEND ALL_HSACOS "${HSACO}")
   endif(AOTRITON_COMPRESS_KERNEL)
