@@ -37,7 +37,10 @@ attn_fwd(T4 q, // batch_size x num_heads x seqlen_q x head_size
          T4 Out, // batch_size x num_heads x seqlen_q x head_size
          float dropout_p,
          T0 philox_seed,
-         T0 philox_offset,
+         T0 philox_offset1,
+         int64_t philox_offset2,
+         T0 philox_seed_output,
+         T0 philox_offset_output,
          T4 encoded_softmax,
          bool is_causal,
          aotriton::Stream stream,
@@ -57,7 +60,10 @@ attn_fwd_compact_varlen(T4 q, // 1 x num_heads x total_q x head_size, total_q :=
                         T4 Out, // 1 x num_heads x total_q x head_size
                         float dropout_p,
                         T0 philox_seed,
-                        T0 philox_offset,
+                        T0 philox_offset1,
+                        int64_t philox_offset2,
+                        T0 philox_seed_output,
+                        T0 philox_offset_output,
                         T4 encoded_softmax,
                         bool is_causal,
                         aotriton::Stream stream,
@@ -79,7 +85,8 @@ attn_bwd(T4 q, // batch_size x num_heads x seqlen_q x head_size
          T2 delta, // buffer, empty_like(softmax_lse)
          float dropout_p,
          T0 philox_seed,
-         T0 philox_offset,
+         T0 philox_offset1,
+         int64_t philox_offset2,
          bool is_causal,
          aotriton::Stream stream,
          BwdExtraArguments* extargs = nullptr);
@@ -104,7 +111,8 @@ attn_bwd_compact_varlen(T4 q, // 1 x num_heads x total_q x head_size, total_q :=
                         T2 delta, // buffer, empty_like(softmax_lse)
                         float dropout_p,
                         T0 philox_seed,
-                        T0 philox_offset,
+                        T0 philox_offset1,
+                        int64_t philox_offset2,
                         bool is_causal,
                         aotriton::Stream stream,
                         BwdExtraArguments* extargs = nullptr);
