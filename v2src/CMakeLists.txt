@@ -82,7 +82,6 @@ if(NOT AOTRITON_NOIMAGE_MODE)
       "--target" "${TGTGPU}"
       "--signature" "${SIG}"
       "--timeout" "${AOTRITON_GPU_BUILD_TIMEOUT}"
-      DEPENDS aotriton_venv_triton
     )
     # DO NOT USE list(APPEND). It is quadratic growth
     file(APPEND "${AOTRITON_HSACO_RECORD}" "${HSACO}" "\n")

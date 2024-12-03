@@ -80,7 +80,7 @@ endif()
 set(Python_ARTIFACTS_INTERACTIVE TRUE)
 
 # Not a target, we need to override Python3_EXECUTABLE later
-execute_process(COMMAND "${Python3_EXECUTABLE}" -m venv "${VENV_DIR}")
+execute_process(COMMAND "${Python3_EXECUTABLE}" -m venv "${VENV_DIR}" --system-site-packages)
 
 set(ENV{VIRTUAL_ENV} "${VENV_DIR}")
 message("VENV_DIR ${VENV_DIR}")
@@ -93,23 +93,6 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E env VIRTUAL_ENV=${VENV_DIR} "${VENV_
 message("VENV_SITE ${VENV_SITE}")
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E env VIRTUAL_ENV=${VENV_DIR} "${VENV_DIR}/bin/python" -m pip install -r "${CMAKE_CURRENT_LIST_DIR}/requirements.txt")
-
-# AOTRITON_NOIMAGE_MODE does not need Triton
-if(NOT AOTRITON_NOIMAGE_MODE)
-  set(TRITON_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/triton_build")
-  execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${TRITON_BUILD_DIR}")
-  set(AOTRITON_TRITON_SO "${CMAKE_CURRENT_LIST_DIR}/third_party/triton/python/triton/_C/libtriton.so")
-  set(AOTRITON_TRITON_EGGLINK "${VENV_SITE}/triton.egg-link")
-  message("AOTRITON_TRITON_EGGLINK ${AOTRITON_TRITON_EGGLINK}")
-
-  add_custom_command(OUTPUT "${AOTRITON_TRITON_EGGLINK}"
-    COMMAND ${CMAKE_COMMAND} -E env VIRTUAL_ENV=${VENV_DIR} TRITON_BUILD_DIR=${TRITON_BUILD_DIR} "${VENV_DIR}/bin/python" setup.py develop
-    # COMMAND ${CMAKE_COMMAND} -E env VIRTUAL_ENV=${VENV_DIR} python -m pip show triton
-    WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/third_party/triton/python/"
-    BYPRODUCTS "${AOTRITON_TRITON_SO}"
-  )
-  add_custom_target(aotriton_venv_triton ALL DEPENDS ${AOTRITON_TRITON_EGGLINK})
-endif(NOT AOTRITON_NOIMAGE_MODE)
 
 add_subdirectory(v2src)
 
